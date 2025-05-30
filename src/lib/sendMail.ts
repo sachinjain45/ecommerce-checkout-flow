@@ -1,4 +1,3 @@
-// lib/sendMail.ts
 import nodemailer from "nodemailer";
 
 type MailStatus = "approved" | "declined" | "error";

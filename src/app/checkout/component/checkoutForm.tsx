@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useFormik } from "formik";
@@ -7,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Form, Button, Alert, Row, Col, Spinner } from "react-bootstrap";
 import React, { useState } from "react";
-
-export const dynamic = "force-dynamic";
 
 export default function CheckoutForm({ product, variant, quantity }: any) {
   const router = useRouter();
@@ -121,8 +118,6 @@ export default function CheckoutForm({ product, variant, quantity }: any) {
         }
       } catch (err: any) {
         setError(err.message || "Something went wrong");
-        console.log("cardError", cardError);
-
         fetch("/api/sendMailDecline", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

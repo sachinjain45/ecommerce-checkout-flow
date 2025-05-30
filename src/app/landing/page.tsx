@@ -175,7 +175,6 @@ export default function LandingPage() {
   );
 }
 
-// ✅ Inline loader CSS as style object
 const loaderStyle: React.CSSProperties = {
   width: "64px",
   height: "64px",
@@ -189,7 +188,6 @@ const loaderStyle: React.CSSProperties = {
   animation: "spin 1s infinite linear",
 };
 
-// ✅ Add keyframes manually (since it's not in CSS file)
 if (typeof document !== "undefined") {
   const style = document.createElement("style");
   style.innerHTML = `
@@ -200,7 +198,6 @@ if (typeof document !== "undefined") {
   document.head.appendChild(style);
 }
 
-// Quantity button style
 const buttonStyle: React.CSSProperties = {
   backgroundColor: "#2A2F45",
   color: "#fff",

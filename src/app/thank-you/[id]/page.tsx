@@ -1,6 +1,7 @@
 import { dbConnect } from "@/lib/dbConnect";
 import Order from "@/models/Order";
-import { Container, Row, Col, Image, Button, Badge } from "react-bootstrap";
+import { Container, Row, Col, Image, Badge } from "react-bootstrap";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -48,22 +49,22 @@ export default async function ThankYouPage({ params }: any) {
           <Row className="align-items-center border rounded-3 p-3 mt-3">
             <Col xs={12} md={6} className="mb-3 mb-md-0">
               <Image
-                src={product.image || "/placeholder.png"}
-                alt={product.name}
+                src={product?.image || "/placeholder.png"}
+                alt={product?.name || "Product Image"}
                 fluid
                 rounded
                 style={{ maxHeight: 400, objectFit: "cover", width: "100%" }}
               />
             </Col>
             <Col xs={12} md={6} className="text-start">
-              <p className="fs-4 fw-medium mb-2">{product.name}</p>
+              <p className="fs-4 fw-medium mb-2">{product?.name || "N/A"}</p>
               <p className="text-muted mb-1">
                 Quantity:{" "}
-                <span className="fw-semibold">{product.quantity || 1}</span>
+                <span className="fw-semibold">{product?.quantity || 1}</span>
               </p>
               <p className="text-muted">
                 Total Price:{" "}
-                <span className="fw-semibold">₹{product.totalPrice}</span>
+                <span className="fw-semibold">₹{product?.totalPrice || 0}</span>
               </p>
             </Col>
           </Row>
@@ -72,12 +73,12 @@ export default async function ThankYouPage({ params }: any) {
         <div className="mb-4 border rounded-3 p-3">
           <h2 className="fw-semibold mb-3 text-dark">Shipping Information</h2>
           <div className="text-secondary">
-            <p className="mb-1">{customer.name}</p>
-            <p className="mb-1">{customer.address}</p>
+            <p className="mb-1">{customer?.name || "N/A"}</p>
+            <p className="mb-1">{customer?.address || "N/A"}</p>
             <p className="mb-1">
-              {customer.city}, {customer.state} - {customer.zipCode}
+              {customer?.city}, {customer?.state} - {customer?.zipCode}
             </p>
-            <p>Phone: {customer.phone}</p>
+            <p>Phone: {customer?.phone || "N/A"}</p>
           </div>
         </div>
 
@@ -89,9 +90,9 @@ export default async function ThankYouPage({ params }: any) {
             Status:{" "}
             {transactionStatus === "success" ? "Payment Confirmed" : "Pending"}
           </Badge>
-          <Button href="/" variant="primary">
+          <Link href="/landing" passHref className="btn btn-primary">
             Continue Shopping
-          </Button>
+          </Link>
         </div>
       </div>
     </Container>

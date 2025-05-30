@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface IOrder extends Document {

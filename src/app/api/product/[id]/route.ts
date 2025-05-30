@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { dbConnect } from "@/lib/dbConnect";
 import Product from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
