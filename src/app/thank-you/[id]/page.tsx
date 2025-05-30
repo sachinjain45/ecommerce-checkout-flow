@@ -4,13 +4,7 @@ import { Container, Row, Col, Image, Button, Badge } from "react-bootstrap";
 
 export const dynamic = "force-dynamic";
 
-interface ThankYouPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function ThankYouPage({ params }: ThankYouPageProps) {
+export default async function ThankYouPage({ params }: any) {
   await dbConnect();
   const order = await Order.findOne({ orderNumber: params.id });
 
@@ -48,6 +42,7 @@ export default async function ThankYouPage({ params }: ThankYouPageProps) {
             Order ID: <span className="fw-semibold">{order.orderNumber}</span>
           </p>
         </div>
+
         <div className="mb-4 text-center">
           <h2 className="fw-semibold text-dark">Your Order Summary</h2>
           <Row className="align-items-center border rounded-3 p-3 mt-3">

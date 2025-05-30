@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import Product from "../models/Product.js";
 

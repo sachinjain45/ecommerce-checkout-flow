@@ -31,12 +31,7 @@ interface CheckoutRequestBody {
   paymentIntentId: string;
 }
 
-type TransactionStatus =
-  | "approved"
-  | "declined"
-  | "error"
-  | "processing"
-  | "requires_action";
+type TransactionStatus = "approved" | "declined" | "error" | "requires_action";
 
 const ERROR_RESPONSES = {
   PRODUCT_NOT_FOUND: {
@@ -105,9 +100,6 @@ export async function POST(req: NextRequest) {
       case "canceled":
         transactionStatus = "declined";
         break;
-      case "processing":
-        transactionStatus = "processing";
-        break;
       case "requires_action":
         transactionStatus = "requires_action";
         break;
@@ -130,8 +122,15 @@ export async function POST(req: NextRequest) {
       paymentIntentId,
     });
 
+    const mailStatus: "approved" | "declined" | "error" =
+      transactionStatus === "approved"
+        ? "approved"
+        : transactionStatus === "declined"
+        ? "declined"
+        : "error";
+
     await sendMail({
-      status: transactionStatus,
+      status: mailStatus,
       to: customer.email,
       orderNumber,
       totalPrice,
