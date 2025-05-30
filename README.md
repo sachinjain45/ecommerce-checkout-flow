@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 eCommerce Checkout Flow Simulation
 
-## Getting Started
+This project simulates a mini eCommerce checkout flow using **Next.js 15** and **Stripe**, with backend logic handled in the same application. It includes a landing page, checkout form with dynamic order summary, transaction simulation (success/failure/error), and a thank you page. Email notifications are sent via **Mailtrap.io**.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Landing Page with Product Info
+- Checkout Page with Validation
+- Stripe Payment Simulation
+- Order Summary & Inventory Update
+- Transaction Status (Approved / Declined / Gateway Failure)
+- Thank You Page with Order Details
+- Confirmation Email via Mailtrap (Success & Failure)
+
+---
+
+## 🧰 Tech Stack
+
+- **Frontend**: Next.js 15 (App Router, Server Actions)
+- **Backend**: API routes within Next.js
+- **Database**: MongoDB
+- **Payments**: Stripe (mocked/simulated)
+- **Emails**: Mailtrap.io (sandbox mode)
+
+---
+
+## 📄 Pages & Flow
+
+### 1. Landing Page
+
+- Product image, title, description, price
+- Variant and quantity selectors
+- "Buy Now" button → navigates to checkout with product data
+
+### 2. Checkout Page
+
+- Customer Info (name, email, phone, address)
+- Credit card inputs with validation (format, future expiry, etc.)
+- Real-time order summary with variant & quantity
+- On submission:
+  - Data saved to DB
+  - Inventory updated
+  - Stripe simulation
+  - Confirmation email sent via Mailtrap
+  - Redirect to Thank You page
+
+### 3. Thank You Page
+
+- Displays order number, order details, customer info
+- Fetches from DB (not browser storage)
+
+---
+
+## ✉️ Email Integration (Mailtrap)
+
+Emails are sent using **Mailtrap.io** (SMTP sandbox):
+
+- **Approved Email**: includes order summary and thank-you message
+- **Failed/Declined Email**: includes failure notice and retry suggestion
+
+Set up your `.env.local`:
+
+```env
+NEXT_MONGO_URI="your-mongodb-connection-url"
+NEXT_MAILTRAP_USER="your-mailtrap-username"
+NEXT_MAILTRAP_PASS="your-mailtrap-password"
+NEXT_STRIPE_SECRET_KEY="your-stripe-secret-key"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="your-stripe-public-key"
+NEXT_PUBLIC_CLIENT_URL=http://localhost:3000
+NEXT_PUBLIC_EMAIL_FROM='"Shop Support" <add-your-email>'
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git clone https://github.com/sachinjain45/ecommerce-checkout-flow.git
+cd ecommerce-checkout-flow
+npm install
+npm run dev && npm run seed
+```
