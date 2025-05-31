@@ -173,7 +173,7 @@ export default function LandingPage() {
 
           <Button
             onClick={handleBuyNow}
-            disabled={!variant || quantity < 1 || loading}
+            disabled={!variant || quantity < 1 || !size || loading}
             variant="light"
             className="text-dark fw-bold px-4 py-2"
             style={{ borderRadius: "8px" }}
