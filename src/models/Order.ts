@@ -19,6 +19,8 @@ interface IOrder extends Document {
     price: number;
     title: string;
     image: string;
+    sizes: string[];
+    variants: string[];
     totalPrice: number;
     [key: string]: any;
   };

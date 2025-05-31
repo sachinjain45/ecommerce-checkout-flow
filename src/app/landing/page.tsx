@@ -11,6 +11,7 @@ type Product = {
   price: number;
   image: string;
   variants: string[];
+  sizes?: string[];
 };
 
 export default function LandingPage() {
@@ -18,6 +19,7 @@ export default function LandingPage() {
   const [variant, setVariant] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState(false);
+  const [size, setSize] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +38,18 @@ export default function LandingPage() {
     };
 
     fetchProduct();
+
+    // Add keyframe style for loader
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes spin {
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
 
   const handleBuyNow = () => {
@@ -44,7 +58,7 @@ export default function LandingPage() {
     setLoading(true);
     setTimeout(() => {
       router.push(
-        `/checkout?productId=${product._id}&variant=${variant}&quantity=${quantity}`
+        `/checkout?productId=${product._id}&variant=${variant}&quantity=${quantity}&size=${size}`
       );
     }, 1000);
   };
@@ -105,21 +119,32 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mb-3">
-            <label style={{ fontSize: "14px", color: "#aaa" }}>Size</label>
-            <div
-              className="fw-bold mt-2"
-              style={{
-                padding: "8px 16px",
-                borderRadius: "20px",
-                backgroundColor: "#fff",
-                color: "#1D2230",
-                display: "inline-block",
-              }}
-            >
-              9
+          {product.sizes && (
+            <div className="mb-3">
+              <label style={{ fontSize: "14px", color: "#aaa" }}>Size</label>
+              <div className="d-flex flex-wrap gap-2 mt-2">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSize(s)}
+                    disabled={loading}
+                    className="fw-bold"
+                    style={{
+                      padding: "8px 16px",
+                      borderRadius: "20px",
+                      backgroundColor: size === s ? "#fff" : "#2A2F45",
+                      color: size === s ? "#1D2230" : "#fff",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mb-3">
             <label style={{ fontSize: "14px", color: "#aaa" }}>Quantity</label>
@@ -144,7 +169,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="fw-bold my-3 fs-5">$. {product.price.toFixed(2)}</div>
+          <div className="fw-bold my-3 fs-5">${product.price.toFixed(2)}</div>
 
           <Button
             onClick={handleBuyNow}
@@ -187,16 +212,6 @@ const loaderStyle: React.CSSProperties = {
   backgroundColor: "#1D2230",
   animation: "spin 1s infinite linear",
 };
-
-if (typeof document !== "undefined") {
-  const style = document.createElement("style");
-  style.innerHTML = `
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-  `;
-  document.head.appendChild(style);
-}
 
 const buttonStyle: React.CSSProperties = {
   backgroundColor: "#2A2F45",

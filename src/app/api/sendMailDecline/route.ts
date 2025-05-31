@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import sendMail from "@/lib/sendMail";
+import sendMailDecline from "@/lib/sendMailDecline";
 
 interface DeclineRequestBody {
   email: string;
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const productTitle = product?.title ?? "";
     const productPrice = (product?.price ?? 0) * quantity;
 
-    await sendMail({
+    await sendMailDecline({
       status: "declined",
       to: email,
       orderNumber: "N/A",

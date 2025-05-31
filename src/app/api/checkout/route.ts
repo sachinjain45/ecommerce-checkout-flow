@@ -83,11 +83,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.info("PaymentIntent retrieved", {
-      id: intent.id,
-      status: intent.status,
-    });
-
     let transactionStatus: TransactionStatus;
 
     switch (intent.status) {
@@ -122,15 +117,8 @@ export async function POST(req: NextRequest) {
       paymentIntentId,
     });
 
-    const mailStatus: "approved" | "declined" | "error" =
-      transactionStatus === "approved"
-        ? "approved"
-        : transactionStatus === "declined"
-        ? "declined"
-        : "error";
-
     await sendMail({
-      status: mailStatus,
+      status: "approved",
       to: customer.email,
       orderNumber,
       totalPrice,
@@ -141,10 +129,7 @@ export async function POST(req: NextRequest) {
         quantity: product.quantity,
         variant: product.variant,
       },
-      message:
-        transactionStatus === "approved"
-          ? undefined
-          : "Transaction was declined or an error occurred.",
+      message: "Thank you for your purchase! Your order has been confirmed.",
     });
 
     return NextResponse.json(

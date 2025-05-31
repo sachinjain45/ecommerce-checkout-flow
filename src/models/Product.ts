@@ -6,6 +6,7 @@ interface IProduct extends Document {
   image: string;
   price: number;
   variants: string[];
+  sizes: string[];
   stock: number;
 }
 
@@ -15,6 +16,7 @@ const ProductSchema: Schema<IProduct> = new mongoose.Schema({
   image: { type: String, required: true },
   price: { type: Number, required: true },
   variants: { type: [String], required: true },
+  sizes: { type: [String], required: true },
   stock: { type: Number, required: true },
 });
 

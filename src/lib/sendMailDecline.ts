@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-type MailStatus = "approved";
+type MailStatus = "declined" | "error";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
@@ -37,17 +37,22 @@ export default async function sendMail({
   product,
   message,
 }: SendMailOptions): Promise<void> {
-  if (status !== "approved") {
-    throw new Error("Invalid status for order confirmation email");
-  }
-  const subject = "🎉 Order Confirmation";
-  const defaultMessage =
-    "Thank you for your purchase! Your order has been confirmed.";
+  const subjects: Record<MailStatus, string> = {
+    declined: "❌ Order Declined",
+    error: "⚠️ Transaction Error",
+  };
+
+  const defaultMessages: Record<MailStatus, string> = {
+    declined: "We're sorry, but your transaction was declined.",
+    error: "Oops! There was an issue with your transaction.",
+  };
 
   const emailHtml = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px; background: #f9f9f9;">
-    <h2 style="text-align: center; color: #28a745;">${subject}</h2>
-    <p>${message || defaultMessage}</p>
+    <h2 style="text-align: center; color: ${
+      status === "declined" ? "#dc3545" : "#ffc107"
+    };">${subjects[status]}</h2>
+    <p>${message || defaultMessages[status]}</p>
     
     <h3 style="margin-top: 30px;">Order Summary</h3>
     <table style="width: 100%; border-collapse: collapse;">
@@ -96,12 +101,14 @@ export default async function sendMail({
   await transporter.sendMail({
     from: process.env.NEXT_PUBLIC_EMAIL_FROM,
     to,
-    subject,
+    subject: subjects[status],
     html: emailHtml,
-    text: `${message || defaultMessage}\n\nOrder #: ${orderNumber}\nCustomer: ${
-      customer.fullName
-    }\nProduct: ${product.title} (${product.variant})\nQuantity: ${
-      product.quantity
-    }\nPrice: $${product.price}\nTotal: $${totalPrice}`,
+    text: `${
+      message || defaultMessages[status]
+    }\n\nOrder #: ${orderNumber}\nCustomer: ${customer.fullName}\nProduct: ${
+      product.title
+    } (${product.variant})\nQuantity: ${product.quantity}\nPrice: $${
+      product.price
+    }\nTotal: $${totalPrice}`,
   });
 }

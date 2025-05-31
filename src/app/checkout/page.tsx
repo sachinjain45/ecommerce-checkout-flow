@@ -2,14 +2,14 @@
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Row, Col, Image, Container } from "react-bootstrap";
+import { Row, Col, Image, Container, Card } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import CheckoutForm from "./component/checkoutForm";
 
 export const dynamic = "force-dynamic";
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
 export default function CheckoutPage() {
@@ -53,38 +53,60 @@ export default function CheckoutPage() {
 
   return (
     <Container className="py-5">
-      <h2 className="text-center mb-5">Checkout</h2>
+      <h2 className="text-center mb-5 fw-bold text-primary">Checkout</h2>
 
-      <div className="p-4 mb-4 border rounded bg-light">
-        <h4 className="fw-bold">Product Summary</h4>
-        <Row className="align-items-center">
-          <Col md={3}>
-            <Image
-              src={product.image}
-              alt={product.title}
-              className="img-fluid rounded"
-            />
-          </Col>
-          <Col md={9}>
-            <h5>{product.title}</h5>
-            <p>{product.description}</p>
-            <p>
-              Variant: <strong>{variant}</strong> | Quantity:{" "}
-              <strong>{quantity}</strong>
-            </p>
-            <p>
-              Price:{" "}
-              <strong>
-                ${product.price} × {quantity} = ${product.price * quantity}
-              </strong>
-            </p>
-          </Col>
-        </Row>
-      </div>
+      <Row>
+        <Col md={6}>
+          <Card className="shadow-sm mb-4 mb-md-0">
+            <Card.Header className="bg-white">
+              <h4 className="mb-0">Payment Details</h4>
+            </Card.Header>
+            <Card.Body>
+              <Elements stripe={stripePromise} options={options}>
+                <CheckoutForm
+                  product={product}
+                  variant={variant}
+                  quantity={quantity}
+                />
+              </Elements>
+            </Card.Body>
+          </Card>
+        </Col>
 
-      <Elements stripe={stripePromise} options={options}>
-        <CheckoutForm product={product} variant={variant} quantity={quantity} />
-      </Elements>
+        <Col md={6}>
+          <Card className="shadow-sm">
+            <Card.Header className="bg-white">
+              <h4 className="mb-0">Product Summary</h4>
+            </Card.Header>
+            <Card.Body>
+              <Row className="align-items-center">
+                <Col md={12} className="mb-3">
+                  <Image
+                    src={product.image}
+                    alt={product.title}
+                    rounded
+                    fluid
+                    style={{ maxHeight: "180px", objectFit: "cover" }}
+                  />
+                </Col>
+                <Col md={12}>
+                  <h5 className="fw-semibold">{product.title}</h5>
+                  <p className="text-muted small">{product.description}</p>
+                  <p className="mb-1">
+                    Variant: <strong>{variant || "Default"}</strong>
+                  </p>
+                  <p className="mb-1">
+                    Quantity: <strong>{quantity}</strong>
+                  </p>
+                  <p className="fs-5 fw-bold mt-3">
+                    Total: ${product.price * quantity}
+                  </p>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 }
